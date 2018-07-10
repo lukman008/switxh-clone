@@ -10,7 +10,6 @@ const connection = MongoClient.connect(url);
 
 
 router.get('/', function(req, res, next) {
-  var query = JSON.parse(req.query);
   connection.then(function(db){
     db = db.db(dbName);
     db.createCollection('Switxh',function(err,collection){
@@ -24,7 +23,15 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/app', function(req, res, next) {
-  var query = JSON.parse(req.query);
+  var query;
+  try{
+    query = JSON.parse(req.query);
+  }catch(err){
+    res.end("Invalid parameters");
+    return;
+  }
+
+  
   connection.then(function(db){
     db = db.db(dbName);
     db.createCollection('Switxh',function(err,collection){
@@ -38,7 +45,13 @@ router.get('/app', function(req, res, next) {
 });
 
 router.get('/dev', function(req, res, next) {
-  var query = JSON.parse(req.query);
+  var query;
+  try{
+    query = JSON.parse(req.query);
+  }catch(err){
+    res.end("Invalid parameters");
+    return;
+  }
   connection.then(function(db){
     db = db.db(dbName);
     db.createCollection('Switxh',function(err,collection){
