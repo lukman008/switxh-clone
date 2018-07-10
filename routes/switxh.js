@@ -9,6 +9,20 @@ const dbName = 'heroku_39xp0czl';
 const connection = MongoClient.connect(url);
 
 
+router.get('/', function(req, res, next) {
+  var query = JSON.parse(req.query);
+  connection.then(function(db){
+    db = db.db(dbName);
+    db.createCollection('Switxh',function(err,collection){
+        assert.strictEqual(null,err);
+        collection.findOne({_id:'dd-swx-001'}, function(err,result) {
+          assert.strictEqual(err,null);
+          res.json(result);
+        });
+    });
+  });  
+});
+
 router.get('/app', function(req, res, next) {
   var query = JSON.parse(req.query);
   connection.then(function(db){
