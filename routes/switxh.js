@@ -25,13 +25,10 @@ router.get('/', function (req, res, next) {
 router.get('/app', function (req, res, next) {
   var query;
   console.log(req.query);
-  console.log(typeof query);
   try {
     query = JSON.parse(req.query);
   } catch (err) {
     console.log(err);
-    res.end("Invalid parameters");
-    return;
   }
 
 
@@ -53,7 +50,6 @@ router.get('/app', function (req, res, next) {
 router.get('/hw', function (req, res, next) {
   var query;
   console.log(req.query);
-  console.log(typeof query);
   try {
     query = JSON.parse(req.query);
   } catch (err) {
