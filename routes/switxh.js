@@ -11,8 +11,8 @@ const connection = MongoClient.connect(url);
 
 
 client.on('connect', function () {
-  client.subscribe('presence');
-  client.publish('presence', 'Hello mqtt');
+  client.subscribe('switxh');
+  client.publish('switxh', 'Hello mqtt');
 });
 
 
@@ -32,7 +32,7 @@ client.on('message', function (topic, message) {
           collection.findOne({ _id: 'dd-swx-001' }, function (err, result) {
             assert.strictEqual(err, null);
 
-            client.publish('presence', JSON.stringify(result));
+            client.publish('switxh', JSON.stringify(result));
             client.end();
           });
         });
