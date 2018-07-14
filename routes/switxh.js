@@ -4,15 +4,22 @@ const MongoClient = require('mongodb').MongoClient();
 const assert = require('assert');
 const url = 'mongodb://luqman:meleoron43@ds231961.mlab.com:31961/heroku_39xp0czl';
 var mqtt = require('mqtt');
-var client = mqtt.connect('mqtt://test.mosquitto.org');
+var client = mqtt.connect('mqtt://broker.shiftr.io',{
+  clientId: 'mqttjs_'+Math.random().toString(16).substr(2,8),
+  username: 'P_monitor',
+  password:'monitor10'
+});
 const dbName = 'heroku_39xp0czl';
 
 const connection = MongoClient.connect(url);
 
 
 client.on('connect', function () {
-  client.subscribe('switxh');
-  client.publish('switxh', 'Hello mqtt');
+  client.subscribe('klempy/Energy_monitr',function (err, granted) {
+      client.publish('klempy/Energy_monitr', 'Hello mqtt from NODEJS');
+      
+  });
+  
 });
 
 
