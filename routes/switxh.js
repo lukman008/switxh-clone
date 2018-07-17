@@ -16,6 +16,29 @@ const connection = MongoClient.connect(url);
 
 client.on('connect', function () {
   client.subscribe('klempy/Energy_monitr', function (err, granted) {
+    client.on('message', function (topic, message) {
+      console.log(message.toString());
+      var mssg = message.toString();
+      if (mssg.startsWith('dd-swx-001')) {
+        var arr = mssg.split(',');
+        console.log(arr);
+        voltage = arr[1];
+        power = arr[2];
+        connection.then(function (db) {
+          db = db.db(dbName);
+          db.createCollection('Switxh', function (err, collection) {
+            assert.strictEqual(null, err);
+            collection.update({ _id: "dd-swx-001" }, { power: power, voltage: voltage, dateModified: Date.now(), caller: "hw" }, { upsert: true }, function (err, result) {
+              assert.strictEqual(err, null);
+              collection.findOne({ _id: 'dd-swx-001' }, function (err, result) {
+                assert.strictEqual(err, null);
+                client.publish('klempy/Energy_monitr', JSON.stringify(result));
+              });
+            });
+          });
+        });
+      }
+    });
     client.publish('klempy/Energy_monitr', 'Hello mqtt from NODEJS');
     connection.then(function (db) {
       db = db.db(dbName);
@@ -27,6 +50,7 @@ client.on('connect', function () {
       });
     });
   });
+
 });
 
 
