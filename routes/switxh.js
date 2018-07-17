@@ -17,6 +17,7 @@ const connection = MongoClient.connect(url);
 client.on('connect', function () {
   client.subscribe('klempy/Energy_monitr', function (err, granted) {
     client.on('message', function (topic, message) {
+      console.log("MQTT message came in");
       console.log(message.toString());
       var mssg = message.toString();
       if (mssg.startsWith('dd-swx-001')) {
