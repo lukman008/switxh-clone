@@ -86,13 +86,17 @@ router.get('/app', function (req, res, next) {
     db = db.db(dbName);
     db.createCollection('Switxh', function (err, collection) {
       assert.strictEqual(null, err);
-      collection.update({ _id: "dd-swx-001" }, { a: query.a, b: query.b, c: query.c, d: query.d, dateModified: Date.now(), caller: "app" },  function (err, result) {
+      collection.findOne({ _id: 'dd-swx-001' }, function (err, result) {
+          assert.strictEqual(err, null);
+          collection.update({ _id: "dd-swx-001" }, {voltage:result.voltage,power:result.power, a: query.a, b: query.b, c: query.c, d: query.d, dateModified: Date.now(), caller: "app" },  function (err, result) {
         assert.strictEqual(err, null);
         collection.findOne({ _id: 'dd-swx-001' }, function (err, result) {
           assert.strictEqual(err, null);
           res.json(result);
         });
       });
+      });
+      
     });
   });
 });
@@ -112,13 +116,17 @@ router.get('/hw', function (req, res, next) {
     db = db.db(dbName);
     db.createCollection('Switxh', function (err, collection) {
       assert.strictEqual(null, err);
-      collection.update({ _id: "dd-swx-001" }, { power: query.power, voltage: query.voltage, dateModified: Date.now(), caller: "hw" }, { upsert: true }, function (err, result) {
+      collection.findOne({ _id: 'dd-swx-001' }, function (err, result) {
+          assert.strictEqual(err, null);
+          collection.update({ _id: "dd-swx-001" }, {a:result.a,b:result.b,c:result.c,d:result.d, power: query.power, voltage: query.voltage, dateModified: Date.now(), caller: "hw" }, { upsert: true }, function (err, result) {
         assert.strictEqual(err, null);
         collection.findOne({ _id: 'dd-swx-001' }, function (err, result) {
           assert.strictEqual(err, null);
           res.json(result);
         });
       });
+      });
+      
     });
   });
 });
