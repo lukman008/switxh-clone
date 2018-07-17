@@ -35,7 +35,7 @@ client.on('connect', function () {
                 assert.strictEqual(err, null);
                 collection.findOne({ _id: 'dd-swx-001' }, function (err, result) {
                   assert.strictEqual(err, null);
-                  client.publish('klempy/Energy_monitr', JSON.stringify(result));
+                  client.publish('klempy/Energy_monitr', 'dd-swx-001,'+result.a+','+result.b+','+result.c+','+result.d);
                 });
               });
             });
