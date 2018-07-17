@@ -28,8 +28,9 @@ client.on('connect', function () {
           db = db.db(dbName);
           db.createCollection('Switxh', function (err, collection) {
             assert.strictEqual(null, err);
-            collection.update({ _id: "dd-swx-001" }, { power: power, voltage: voltage, dateModified: Date.now(), caller: "hw" }, { upsert: true }, function (err, result) {
+            collection.update({ _id: "dd-swx-001" }, { power: power, voltage: voltage, dateModified: Date.now(), caller: "hw" },  function (err, result) {
               assert.strictEqual(err, null);
+              console.log(result);
               collection.findOne({ _id: 'dd-swx-001' }, function (err, result) {
                 assert.strictEqual(err, null);
                 client.publish('klempy/Energy_monitr', JSON.stringify(result));
@@ -84,7 +85,7 @@ router.get('/app', function (req, res, next) {
     db = db.db(dbName);
     db.createCollection('Switxh', function (err, collection) {
       assert.strictEqual(null, err);
-      collection.update({ _id: "dd-swx-001" }, { a: query.a, b: query.b, c: query.c, d: query.d, dateModified: Date.now(), caller: "app" }, { upsert: true }, function (err, result) {
+      collection.update({ _id: "dd-swx-001" }, { a: query.a, b: query.b, c: query.c, d: query.d, dateModified: Date.now(), caller: "app" },  function (err, result) {
         assert.strictEqual(err, null);
         collection.findOne({ _id: 'dd-swx-001' }, function (err, result) {
           assert.strictEqual(err, null);
