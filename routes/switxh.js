@@ -52,10 +52,10 @@ router.get('/app', function (req, res, next) {
   try {
     query = JSON.parse(req.query);
   } catch (err) {
+    query = req.query;
     console.log(err);
   }
-
-
+  console.log(query);
   connection.then(function (db) {
     db = db.db(dbName);
     db.createCollection('Switxh', function (err, collection) {
@@ -78,6 +78,7 @@ router.get('/hw', function (req, res, next) {
     query = JSON.parse(req.query);
   } catch (err) {
     console.log(err);
+    query = req.query;
     res.end("Invalid parameters");
     return;
   }
