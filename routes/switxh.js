@@ -23,15 +23,16 @@ client.on('connect', function () {
       if (mssg.startsWith('dd-swx-001')) {
         var arr = mssg.split(',');
         console.log(arr);
-        voltage = arr[1];
-        power = arr[2];
+        var voltage = arr[1];
+        var power = arr[2];
+        var warning  = arr[3];
         connection.then(function (db) {
           db = db.db(dbName);
           db.createCollection('Switxh', function (err, collection) {
             assert.strictEqual(null, err);
             collection.findOne({ _id: 'dd-swx-001' }, function (err, result) {
               assert.strictEqual(err, null);
-              collection.update({ _id: "dd-swx-001" }, { a: result.a, b: result.b, c: result.c, d: result.d, power: power, voltage: voltage, dateModified: Date.now(), caller: "hw" }, { upsert: true }, function (err, result) {
+              collection.update({ _id: "dd-swx-001" }, { a: result.a, b: result.b, c: result.c, d: result.d, power: power, voltage: voltage, dateModified: Date.now(), caller: "hw", warning: warning }, { upsert: true }, function (err, result) {
                 assert.strictEqual(err, null);
                 collection.findOne({ _id: 'dd-swx-001' }, function (err, result) {
                   assert.strictEqual(err, null);
@@ -90,7 +91,7 @@ router.get('/app', function (req, res, next) {
       assert.strictEqual(null, err);
       collection.findOne({ _id: 'dd-swx-001' }, function (err, result) {
         assert.strictEqual(err, null);
-        collection.update({ _id: "dd-swx-001" }, { voltage: result.voltage, power: result.power, a: query.a, b: query.b, c: query.c, d: query.d, dateModified: Date.now(), caller: "app" }, function (err, result) {
+        collection.update({ _id: "dd-swx-001" }, {warning: result.warning, voltage: result.voltage, power: result.power, a: query.a, b: query.b, c: query.c, d: query.d, dateModified: Date.now(), caller: "app" }, function (err, result) {
           assert.strictEqual(err, null);
           collection.findOne({ _id: 'dd-swx-001' }, function (err, result) {
             assert.strictEqual(err, null);
@@ -120,7 +121,7 @@ router.get('/hw', function (req, res, next) {
       assert.strictEqual(null, err);
       collection.findOne({ _id: 'dd-swx-001' }, function (err, result) {
         assert.strictEqual(err, null);
-        collection.update({ _id: "dd-swx-001" }, { a: result.a, b: result.b, c: result.c, d: result.d, power: query.power, voltage: query.voltage, dateModified: Date.now(), caller: "hw" }, { upsert: true }, function (err, result) {
+        collection.update({ _id: "dd-swx-001" }, { a: result.a, b: result.b, c: result.c, d: result.d, power: query.power, warning: query.warning, voltage: query.voltage, dateModified: Date.now(), caller: "hw" }, { upsert: true }, function (err, result) {
           assert.strictEqual(err, null);
           collection.findOne({ _id: 'dd-swx-001' }, function (err, result) {
             assert.strictEqual(err, null);
